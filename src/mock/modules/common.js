@@ -3,7 +3,6 @@ import Mock from 'mockjs'
 // 登录
 export function login () {
   return {
-    // isOpen: false,
     url: '/sys/login',
     type: 'post',
     data: {

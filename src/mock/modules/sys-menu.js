@@ -376,9 +376,34 @@ var dataList = [
     'orderNum': 6,
     'open': null,
     'list': null
+  }, {
+    'menuId': 31,
+    'parentId': 0,
+    'parentName': null,
+    'name': '会议管理',
+    'url': null,
+    'perms': null,
+    'type': 0,
+    'icon': 'log',
+    'orderNum': 1,
+    'open': null,
+    'list': null
+  }, {
+    'menuId': 32,
+    'parentId': 31,
+    'parentName': '会议管理',
+    'name': '会议安排',
+    'url': null,
+    'perms': null,
+    'type': 1,
+    'icon': 'log',
+    'orderNum': 0,
+    'open': null,
+    'list': null
   }
 ]
-var navDataList = [
+
+const navDataList = [
   {
     'menuId': 1,
     'parentId': 0,
@@ -470,19 +495,6 @@ var navDataList = [
         'list': null
       },
       {
-        'menuId': 30,
-        'parentId': 1,
-        'parentName': null,
-        'name': '文件上传',
-        'url': 'oss/oss',
-        'perms': 'sys:oss:all',
-        'type': 1,
-        'icon': 'oss',
-        'orderNum': 6,
-        'open': null,
-        'list': null
-      },
-      {
         'menuId': 29,
         'parentId': 1,
         'parentName': null,
@@ -494,8 +506,47 @@ var navDataList = [
         'orderNum': 7,
         'open': null,
         'list': null
+      },
+      {
+        'menuId': 30,
+        'parentId': 1,
+        'parentName': null,
+        'name': '文件上传',
+        'url': 'oss/oss',
+        'perms': 'sys:oss:all',
+        'type': 1,
+        'icon': 'oss',
+        'orderNum': 6,
+        'open': null,
+        'list': null
       }
     ]
+  },
+  {
+    'menuId': 31,
+    'parentId': 0,
+    'parentName': null,
+    'name': '会议管理',
+    'url': null,
+    'perms': null,
+    'type': 0,
+    'icon': 'log',
+    'orderNum': 1,
+    'open': null,
+    'list': [
+      {
+        'menuId': 32,
+        'parentId': 31,
+        'parentName': '会议管理',
+        'name': '会议安排',
+        'url': 'meeting/arrange',
+        'perms': null,
+        'type': 1,
+        'icon': 'log',
+        'orderNum': 1,
+        'open': null,
+        'list': null
+      }]
   }
 ]
 
@@ -542,7 +593,11 @@ export function nav () {
         'sys:user:save',
         'sys:schedule:pause',
         'sys:log:list',
-        'sys:oss:all'
+        'meeting:arrange:list',
+        'meeting:arrange:save',
+        'meeting:arrange:delete',
+        'meeting:arrange:delete:all',
+        'meeting:arrange:update'
       ]
     }
   }

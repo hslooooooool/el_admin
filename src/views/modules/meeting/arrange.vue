@@ -1,13 +1,13 @@
 <template>
-  <div class="mod-role">
+  <div class="mod-arrange">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.roleName" placeholder="角色名称" clearable></el-input>
+        <el-input v-model="dataForm.roleName" placeholder="会议名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('sys:role:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="deleteHandle(null)"
+        <el-button v-if="isAuth('meeting:arrange:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('meeting:arrange:delete:all')" type="danger" @click="deleteHandle(null)"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
       </el-form-item>
@@ -25,30 +25,37 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="roleId"
+        prop="meetingId"
         header-align="center"
         align="center"
         width="80"
         label="ID">
       </el-table-column>
+      <table-tree-column
+        prop="meetingName"
+        header-align="center"
+        treeKey="menuId"
+        align="center"
+        label="会议名称">
+      </table-tree-column>
       <el-table-column
-        prop="roleName"
+        prop="meetingDateTime"
         header-align="center"
         align="center"
-        label="角色名称">
+        width="200"
+        label="会议时间">
       </el-table-column>
       <el-table-column
-        prop="remark"
+        prop="status"
         header-align="center"
+        width="100"
         align="center"
-        label="备注">
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        width="180"
-        label="创建时间">
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 0" size="small">已开</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" size="small" type="success">待开</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" size="small" type="info">进行中</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -57,11 +64,11 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:role:update')" type="text" size="small"
-                     @click="addOrUpdateHandle(scope.row.roleId)">修改
+          <el-button v-if="isAuth('meeting:arrange:update')" type="text" size="small"
+                     @click="addOrUpdateHandle(scope.row.meetingId)">修改
           </el-button>
-          <el-button v-if="isAuth('sys:role:delete')" type="text" size="small" @click="deleteHandle(scope.row.roleId)">
-            删除
+          <el-button v-if="isAuth('meeting:arrange:delete')" type="text" size="small"
+                     @click="deleteHandle(scope.row.meetingId)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -81,24 +88,24 @@
 </template>
 
 <script>
-  import AddOrUpdate from './role-add-or-update'
+  import TableTreeColumn from '@/components/table-tree-column'
+  import AddOrUpdate from './arrange-add-or-update'
 
   export default {
     data: function () {
       return {
-        dataForm: {
-          roleName: ''
-        },
+        dataForm: {},
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
-        dataListLoading: false,
         dataListSelections: [],
+        dataListLoading: false,
         addOrUpdateVisible: false
       }
     },
     components: {
+      TableTreeColumn,
       AddOrUpdate
     },
     activated: function () {
@@ -109,12 +116,12 @@
       getDataList: function () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/role/list'),
+          url: this.$http.adornUrl('/meeting/arrange/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'roleName': this.dataForm.roleName
+            'key': this.dataForm.key
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -154,15 +161,15 @@
         var ids = id ? [id] : this.dataListSelections.map(item => {
           return item.roleId
         })
-        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+        this.$confirm(`确定对[id=${ids}]进行[删除]操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/role/delete'),
+            url: this.$http.adornUrl(`/meeting/arrange/delete/${id}`),
             method: 'post',
-            data: this.$http.adornData(ids, false)
+            data: this.$http.adornData()
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({

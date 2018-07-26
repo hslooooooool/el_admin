@@ -1,24 +1,22 @@
 import Mock from 'mockjs'
 
-// 生成数据列表
 const dataList = []
-for (let i = 0; i < Math.floor(Math.random() * 10 + 1); i++) {
+for (let i = 0; i < Math.floor(Math.random() * 10 + 10); i++) {
   dataList.push(Mock.mock({
-    'userId': '@increment',
-    'username': '@name',
-    'email': '@email',
+    'userId': '@INCREMENT',
+    'username': '@NAME',
+    'email': '@EMAIL',
     'mobile': /^1[0-9]{10}$/,
-    'status': 1,
+    'status|0-1': 1,
     'roleIdList': null,
     'createUserId': 1,
-    'createTime': 'datetime'
+    'createTime': Mock.Random.date()
   }))
 }
 
 // 获取用户列表
 export function list () {
   return {
-    // isOpen: false,
     url: '/sys/user/list',
     type: 'get',
     data: {
@@ -38,7 +36,6 @@ export function list () {
 // 获取用户信息
 export function info () {
   return {
-    // isOpen: false,
     url: '/sys/user/info',
     type: 'get',
     data: {
@@ -52,7 +49,6 @@ export function info () {
 // 修改密码
 export function updatePassword () {
   return {
-    // isOpen: false,
     url: '/sys/user/password',
     type: 'post',
     data: {
@@ -65,7 +61,6 @@ export function updatePassword () {
 // 添加用户
 export function add () {
   return {
-    // isOpen: false,
     url: '/sys/user/save',
     type: 'post',
     data: {
@@ -78,7 +73,6 @@ export function add () {
 // 修改用户
 export function update () {
   return {
-    // isOpen: false,
     url: '/sys/user/update',
     type: 'post',
     data: {
@@ -91,7 +85,6 @@ export function update () {
 // 删除用户
 export function del () {
   return {
-    // isOpen: false,
     url: '/sys/user/delete',
     type: 'post',
     data: {

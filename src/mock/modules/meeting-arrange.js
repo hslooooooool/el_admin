@@ -1,22 +1,20 @@
 import Mock from 'mockjs'
 
-// 生成数据列表
-const dataList = []
-for (let i = 0; i < Math.floor(Math.random() * 10 + 1); i++) {
+// 会议信息
+var dataList = []
+for (let i = 0; i < Math.floor(10); i++) {
   dataList.push(Mock.mock({
-    'roleId': '@increment',
-    'roleName': '@name',
-    'remark': '@csentence',
-    'createUserId': 1,
-    'menuIdList': '@range(1, 10, 2)',
-    'createTime': '@datetime'
+    'meetingId': '@INCREMENT',
+    'meetingName': '@NAME',
+    'meetingDateTime': Mock.Random.date(),
+    'status|0-2': 0
   }))
 }
 
-// 获取角色列表
+// 获取会议列表
 export function list () {
   return {
-    url: '/sys/role/list',
+    url: '/meeting/arrange/list',
     type: 'get',
     data: {
       'msg': 'success',
@@ -32,36 +30,23 @@ export function list () {
   }
 }
 
-// 获取角色列表, 根据当前用户
-export function select () {
-  return {
-    url: '/sys/role/select',
-    type: 'get',
-    data: {
-      'msg': 'success',
-      'code': 0,
-      'list': dataList
-    }
-  }
-}
-
-// 获取角色信息
+// 获取会议信息
 export function info () {
   return {
-    url: '/sys/role/info',
+    url: '/meeting/arrange/info',
     type: 'get',
     data: {
       'msg': 'success',
       'code': 0,
-      'role': dataList[0]
+      'user': dataList[0]
     }
   }
 }
 
-// 添加角色
+// 添加会议
 export function add () {
   return {
-    url: '/sys/role/save',
+    url: '/meeting/arrange/save',
     type: 'post',
     data: {
       'msg': 'success',
@@ -70,10 +55,10 @@ export function add () {
   }
 }
 
-// 修改角色
+// 修改会议
 export function update () {
   return {
-    url: '/sys/role/update',
+    url: '/meeting/arrange/update',
     type: 'post',
     data: {
       'msg': 'success',
@@ -82,10 +67,22 @@ export function update () {
   }
 }
 
-// 删除角色
+// 退出会议
+export function exit () {
+  return {
+    url: '/meeting/arrange/exit',
+    type: 'post',
+    data: {
+      'msg': 'success',
+      'code': 0
+    }
+  }
+}
+
+// 删除会议
 export function del () {
   return {
-    url: '/sys/role/delete',
+    url: '/meeting/arrange/delete',
     type: 'post',
     data: {
       'msg': 'success',
