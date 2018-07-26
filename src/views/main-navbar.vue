@@ -1,9 +1,10 @@
+<!--顶部操作栏-->
 <template>
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
     <div class="site-navbar__header">
       <h1 class="site-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="site-navbar__brand-lg" href="javascript:;">人人快速开发平台</a>
-        <a class="site-navbar__brand-mini" href="javascript:;">人人</a>
+        <a class="site-navbar__brand-lg" href="javascript:;">开发平台</a>
+        <a class="site-navbar__brand-mini" href="javascript:;">平台</a>
       </h1>
     </div>
     <div class="site-navbar__body clearfix">
@@ -17,33 +18,44 @@
       <el-menu
         class="site-navbar__menu site-navbar__menu--right"
         mode="horizontal">
-        <el-menu-item index="1" @click="$router.push({ name: 'theme' })">
+        <!--侨务资源管理-->
+        <el-menu-item index="1">
           <template slot="title">
-            <el-badge value="new">
-              <icon-svg name="shezhi" class="el-icon-setting"/>
-            </el-badge>
+            侨务资源管理
           </template>
         </el-menu-item>
+        <!--侨务服务管理-->
         <el-menu-item index="2">
-          <el-badge value="hot">
-            <a href="//www.renren.io/" target="_blank">官方社区</a>
-          </el-badge>
+          <template slot="title">
+            侨务服务管理
+          </template>
         </el-menu-item>
-        <el-submenu index="3">
-          <template slot="title">Git源码</template>
-          <el-menu-item index="2-1"><a href="//github.com/daxiongYang/renren-fast-vue" target="_blank">前端</a>
-          </el-menu-item>
-          <el-menu-item index="2-2"><a href="//git.oschina.net/renrenio/renren-fast" target="_blank">后台</a>
-          </el-menu-item>
-          <el-menu-item index="2-3"><a href="//git.oschina.net/renrenio/renren-generator" target="_blank">代码生成器</a>
-          </el-menu-item>
-        </el-submenu>
-        <el-menu-item class="site-navbar__avatar" index="3">
+        <!--单位门户管理-->
+        <el-menu-item index="3">
+          <template slot="title">
+            单位门户管理
+          </template>
+        </el-menu-item>
+        <!--双创门户管理-->
+        <el-menu-item index="4">
+          <template slot="title">
+            双创门户管理
+          </template>
+        </el-menu-item>
+        <!--系统管理-->
+        <el-menu-item index="5">
+          <template slot="title">
+            系统管理
+          </template>
+        </el-menu-item>
+        <!--我的-->
+        <el-menu-item class="site-navbar__avatar" index="4">
           <el-dropdown :show-timeout="0" placement="bottom">
             <span class="el-dropdown-link">
               <img src="~@/assets/img/avatar.png" :alt="userName">{{ userName }}
             </span>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="themeSettingHandle()">主题设置</el-dropdown-item>
               <el-dropdown-item @click.native="updatePasswordHandle()">修改密码</el-dropdown-item>
               <el-dropdown-item @click.native="logoutHandle()">退出</el-dropdown-item>
             </el-dropdown-menu>
@@ -51,22 +63,27 @@
         </el-menu-item>
       </el-menu>
     </div>
+    <!-- 弹窗, 主题设置 -->
+    <theme-setting v-if="themeSettingVisible" ref="themeSetting"/>
     <!-- 弹窗, 修改密码 -->
-    <update-password v-if="updatePassowrdVisible" ref="updatePassowrd"/>
+    <update-password v-if="updatePasswordVisible" ref="updatePassword"/>
   </nav>
 </template>
 
 <script>
   import UpdatePassword from './main-navbar-update-password'
+  import ThemeSetting from './main-navbar-theme-setting'
 
   export default {
     data: function () {
       return {
-        updatePassowrdVisible: false
+        themeSettingVisible: false,
+        updatePasswordVisible: false
       }
     },
     components: {
-      UpdatePassword
+      UpdatePassword,
+      ThemeSetting
     },
     computed: {
       navbarLayoutType: {
@@ -97,11 +114,18 @@
       }
     },
     methods: {
+      // 主题设置
+      themeSettingHandle: function () {
+        this.themeSettingVisible = true
+        this.$nextTick(() => {
+          this.$refs.themeSetting.init()
+        })
+      },
       // 修改密码
       updatePasswordHandle: function () {
-        this.updatePassowrdVisible = true
+        this.updatePasswordVisible = true
         this.$nextTick(() => {
-          this.$refs.updatePassowrd.init()
+          this.$refs.updatePassword.init()
         })
       },
       // 退出
